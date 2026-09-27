@@ -1,0 +1,77 @@
+# Syntax Coloring Map For N64Thumbstick
+#
+# keywords.txt has up to four fields, separated by a single tab (not spaces):
+#
+#   KEYWORD  KEYWORD_TOKENTYPE  REFERENCE_LINK  RSYNTAXTEXTAREA_TOKENTYPE
+#
+# KEYWORD_TOKENTYPE:
+#   KEYWORD1  datatypes   (editor.data_type.style)
+#   KEYWORD2  functions   (editor.function.style)
+#   KEYWORD3  structures  (editor.function.style)
+#   LITERAL1  constants   (editor.reserved_word_2.style)
+#   LITERAL2  (unused here; same theme slot as functions)
+#
+# REFERENCE_LINK opens Help > Find in Reference. Third-party libraries are not
+# in the Arduino Language Reference, so that field is left empty.
+#
+# RSYNTAXTEXTAREA_TOKENTYPE overrides KEYWORD_TOKENTYPE on IDE 1.6.5 and newer.
+# DATA_TYPE is the override equivalent of KEYWORD1. It is set on the datatype
+# lines below so the four-field form is visible; the other lines use the
+# two-field form.
+#
+# keywords.txt is global to the IDE, not scoped to sketches that include this
+# library. Single-letter readings (x, y) and ordinary words (left, right, up,
+# down, read) are intentionally omitted so they are not painted in every sketch.
+
+# Datatypes (KEYWORD1)
+N64Thumbstick	KEYWORD1		DATA_TYPE
+N64ThumbstickMode	KEYWORD1		DATA_TYPE
+N64ThumbstickCallback	KEYWORD1		DATA_TYPE
+
+# Methods and Functions (KEYWORD2)
+begin	KEYWORD2
+update	KEYWORD2
+end	KEYWORD2
+xRaw	KEYWORD2
+yRaw	KEYWORD2
+xN64	KEYWORD2
+yN64	KEYWORD2
+xNormalized	KEYWORD2
+yNormalized	KEYWORD2
+xVelocity	KEYWORD2
+yVelocity	KEYWORD2
+zero	KEYWORD2
+setOrigin	KEYWORD2
+invertX	KEYWORD2
+invertY	KEYWORD2
+swapAxes	KEYWORD2
+setDeadzone	KEYWORD2
+deadzone	KEYWORD2
+setDirectionThreshold	KEYWORD2
+directionThreshold	KEYWORD2
+setUnitsPerEdge	KEYWORD2
+unitsPerEdge	KEYWORD2
+setN64Clamp	KEYWORD2
+n64Clamp	KEYWORD2
+setFullScale	KEYWORD2
+fullScaleX	KEYWORD2
+fullScaleY	KEYWORD2
+calibrateBegin	KEYWORD2
+calibrateUpdate	KEYWORD2
+calibrateEnd	KEYWORD2
+onChange	KEYWORD2
+usePullups	KEYWORD2
+architecture	KEYWORD2
+limitedInterruptPins	KEYWORD2
+pinSupportsInterrupt	KEYWORD2
+
+# Instances (KEYWORD2)
+
+# Constants (LITERAL1)
+N64_THUMBSTICK_INTERRUPT	LITERAL1
+N64_THUMBSTICK_POLLING	LITERAL1
+N64_THUMBSTICK_DEFAULT_FULL_SCALE	LITERAL1
+N64_THUMBSTICK_DEFAULT_UNITS_PER_EDGE	LITERAL1
+N64_THUMBSTICK_DEFAULT_CLAMP	LITERAL1
+N64_THUMBSTICK_DEFAULT_DIRECTION_THRESHOLD	LITERAL1
+N64_THUMBSTICK_MAX_INSTANCES	LITERAL1
