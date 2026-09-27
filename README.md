@@ -81,6 +81,7 @@ The object has to stay alive for the whole run, usually as a global. It is not c
 | Pullups | When a floating line needs a pull-up, and why 5 V boards should not use the internal one |
 | ServoFollow | Map X onto a servo pulse without the Servo library |
 | UsbMouse | Pointer motion on a Leonardo or Micro. Install Mouse, then set `N64_EXAMPLE_USE_MOUSE` to 1 |
+| I2cStick | I2C device at 0x32. Every stick call is a register or command, including on an ATtiny85 |
 | Diagnostics | Architecture, interrupt pins, live A/B levels, polling fallback |
 
 ## Readings
