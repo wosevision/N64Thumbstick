@@ -80,7 +80,7 @@ The object has to stay alive for the whole run, usually as a global. It is not c
 | TwoSticks | Two modules, polling, because an Uno has two interrupt pins |
 | Pullups | When a floating line needs a pull-up, and why 5 V boards should not use the internal one |
 | ServoFollow | Map X onto a servo pulse without the Servo library |
-| UsbMouse | Pointer motion on a Leonardo or Micro. Install Mouse, then set `N64_EXAMPLE_USE_MOUSE` to 1 |
+| UsbMouse | Pointer motion on a Leonardo or Micro, or on an ATtiny84 or ATtiny85 by bit-banging low-speed USB. Install Mouse and set `N64_EXAMPLE_USE_MOUSE` to 1 for the 32U4. The 84 needs a 16 MHz crystal. The 85 uses the 16.5 MHz PLL. Wiring is in the sketch |
 | I2cStick | I2C device at 0x32. Every stick call is a register or command, including on an ATtiny85 or ATtiny84. A plain-function master is in `extras/I2cStickClient.ino` |
 | Diagnostics | Architecture, interrupt pins, live A/B levels, polling fallback |
 
