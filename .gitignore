@@ -1,3 +1,18 @@
 # Local Arduino IDE flag. The Library Manager indexer skips any release
 # that still contains .development, so this file stays on disk and out of git.
 .development
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+.cache
+.config
+.local
+.
