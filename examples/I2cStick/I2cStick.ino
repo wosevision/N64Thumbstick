@@ -9,10 +9,10 @@
 
   Numbers are little-endian. Floats are IEEE-754, the same format Arduino
   uses. One read returns at most 32 bytes from the selected register
-  onward. On an ATtiny85 the USI transmit buffer is 16 bytes, so request
-  16 or fewer and write a new register address for the next window. End
-  the write before the read; a repeated start is not reliable on that USI
-  slave.
+  onward. On an ATtiny85 or ATtiny84 the USI transmit buffer is 16 bytes,
+  so request 16 or fewer and write a new register address for the next
+  window. End the write before the read; a repeated start is not reliable
+  on that USI slave.
 
   Register map (the readable image):
 
@@ -90,6 +90,14 @@
     high-voltage programmer restores reset. Run the chip at 8 MHz or
     faster from 3.3 V. The USI driver enables the SDA and SCL pull-ups,
     and 1 MHz cannot keep a 100 kHz bus. Leave LTO enabled.
+  - ATtiny84 (ATTinyCore): same USI slave, so the same 16-byte window,
+    clock, pull-up, and repeated-start limits. SDA is PA6 and SCL is PA4
+    on the silicon. Clockwise pin mapping (Tools > Pin Mapping, the
+    recommended default) numbers those 6 and 4; counterclockwise numbers
+    them 4 and 6. The sketch uses PIN_Pxn names, which follow either
+    mapping. One external interrupt, INT0 on PB2, so the stick is polled:
+    XA PB0, XB PB1, YA PB2, YB PA7. Clockwise, those are pins 10, 9, 8,
+    and 7. PB3 stays reset, so ISP keeps working.
 
   created 27 Sep 2026
   by Jackson Teather
@@ -108,11 +116,23 @@
 
 const uint8_t I2C_ADDRESS = 0x32;
 
+// ATtiny85 and ATtiny84 both speak I2C through the USI. The slave buffer
+// is 16 bytes, and neither part has a hardware UART.
+#if defined(__AVR_ATtinyX5__) || defined(__AVR_ATtinyX4__)
+#define I2C_STICK_USI_SLAVE 1
+#endif
+
 #if defined(__AVR_ATtinyX5__)
 const uint8_t PIN_XA = 1;
 const uint8_t PIN_XB = 3;
 const uint8_t PIN_YA = 4;
 const uint8_t PIN_YB = 5;
+const N64ThumbstickMode STICK_MODE = N64_THUMBSTICK_POLLING;
+#elif defined(__AVR_ATtinyX4__)
+const uint8_t PIN_XA = PIN_PB0;
+const uint8_t PIN_XB = PIN_PB1;
+const uint8_t PIN_YA = PIN_PB2;
+const uint8_t PIN_YB = PIN_PA7;
 const N64ThumbstickMode STICK_MODE = N64_THUMBSTICK_POLLING;
 #elif defined(ARDUINO_AVR_LEONARDO) || defined(ARDUINO_AVR_MICRO) || \
     defined(ARDUINO_AVR_YUN) || defined(ARDUINO_AVR_ESPLORA)
@@ -127,6 +147,13 @@ const uint8_t PIN_XB = 4;
 const uint8_t PIN_YA = 3;
 const uint8_t PIN_YB = 5;
 const N64ThumbstickMode STICK_MODE = N64_THUMBSTICK_INTERRUPT;
+#endif
+
+#if defined(I2C_STICK_USI_SLAVE)
+static_assert(PIN_XA != SDA && PIN_XB != SDA && PIN_YA != SDA && PIN_YB != SDA,
+              "stick pin is SDA");
+static_assert(PIN_XA != SCL && PIN_XB != SCL && PIN_YA != SCL && PIN_YB != SCL,
+              "stick pin is SCL");
 #endif
 
 const uint8_t REG_CHANGED = 0x16;
@@ -206,7 +233,7 @@ N64Thumbstick stick;
 Image image;
 uint8_t published[sizeof(Image)];
 volatile uint8_t regPointer = 0;
-#if defined(__AVR_ATtinyX5__)
+#if defined(I2C_STICK_USI_SLAVE)
 volatile uint8_t rxBuf[16];
 #else
 volatile uint8_t rxBuf[32];
@@ -472,7 +499,7 @@ void requestEvent() {
   }
   uint8_t count = (uint8_t)(sizeof(published) - start);
   uint8_t limit = 32;
-#if defined(__AVR_ATtinyX5__)
+#if defined(I2C_STICK_USI_SLAVE)
   limit = 16;
 #endif
   if (count > limit) {
@@ -482,7 +509,7 @@ void requestEvent() {
 }
 
 void setup() {
-#if !defined(__AVR_ATtinyX5__)
+#if !defined(I2C_STICK_USI_SLAVE)
   Serial.begin(9600);
 #if defined(USBCON)
   const unsigned long waitStart = millis();
@@ -502,7 +529,7 @@ void setup() {
   Wire.onReceive(receiveEvent);
   Wire.onRequest(requestEvent);
 
-#if !defined(__AVR_ATtinyX5__)
+#if !defined(I2C_STICK_USI_SLAVE)
   Serial.print(F("I2C stick at 0x"));
   Serial.println(I2C_ADDRESS, HEX);
   if (!begunOk) {

@@ -109,7 +109,7 @@ The sketches are public domain. The library is LGPL 2.1 or later. Arduino's exam
 
 ## extras and the development flag
 
-`extras/` is bundled and ignored by the builder. It holds this note, the wiring note, and the quadrature note. The spec's warning is that a large binary here inflates every install. These are short text files.
+`extras/` is bundled and ignored by the builder. It holds this note, the wiring note, the quadrature note, and `I2cStickClient.ino`, a one-page master for the I2cStick device written as plain functions. The spec's warning is that a large binary here inflates every install. These are short text files.
 
 `.development` in the library root, next to `library.properties`, makes the IDE treat examples as editable (IDE 1.6.6 and newer). The Library Manager indexer skips any release that still contains that file. `.gitignore` excludes it so a normal commit does not publish it. Delete the working copy as well before cutting a release zip.
 
